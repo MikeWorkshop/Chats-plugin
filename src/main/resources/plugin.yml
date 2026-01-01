@@ -1,0 +1,12 @@
+name: Chats
+main: com.mike.chats.Chats
+version: '${project.version}'
+api-version: '1.17'
+author: Mike
+commands:
+  achat:
+    aliases:
+      - adminchat
+  chat:
+    aliases:
+      - c
