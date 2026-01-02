@@ -2,6 +2,7 @@ package com.mike.chats.PlayerCmd;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.mike.chats.ChatsMessageEvent;
 import com.mike.chats.FileManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -31,11 +32,8 @@ public class PComando implements CommandExecutor {
                             " secondi prima di eseguire di nuovo il comando");
                     return true;
                 }
-
                 String nomeChat = args[0];
-                //ricerca della chat nel chats.yml
                 if (FileManager.contieneChat(nomeChat)) {
-                    //controllo del permesso
                     String perm = FileManager.getPermesso(nomeChat);
                     if (p.hasPermission(perm)) {
                         StringBuilder mess = new StringBuilder();
@@ -43,16 +41,12 @@ public class PComando implements CommandExecutor {
                             mess.append(args[i] + " ");
                         }
 
-                        String prefix = FileManager.getPrefisso(nomeChat);
-                        for (Player player : Bukkit.getOnlinePlayers()) {
-                            if (player.hasPermission(perm)) {
-                                player.sendMessage(
-                                        ChatColor.translateAlternateColorCodes('&', prefix)
-                                                + " "
-                                                + ChatColor.GRAY + p.getName() + " » " + mess);
-                            }
-                        }
                         cooldown.put(p.getUniqueId(), System.currentTimeMillis() + (COOLDOWN_SECONDS * 1000));
+
+                        ChatsMessageEvent event = new ChatsMessageEvent(p, nomeChat, mess.toString());
+                        Bukkit.getPluginManager().callEvent(event);
+                        if (event.isCancelled()) return true;
+
                     } else{
                         p.sendMessage(ChatColor.RED + "Non hai il permesso per scrivere in questa chat");
                     }
