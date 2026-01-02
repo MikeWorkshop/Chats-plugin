@@ -38,14 +38,14 @@ public class PComando implements CommandExecutor {
                     if (p.hasPermission(perm)) {
                         StringBuilder mess = new StringBuilder();
                         for (int i = 1; i < args.length; i++) {
-                            mess.append(args[i] + " ");
+                            mess.append(args[i]).append(" ");
                         }
 
                         cooldown.put(p.getUniqueId(), System.currentTimeMillis() + (COOLDOWN_SECONDS * 1000));
 
                         ChatsMessageEvent event = new ChatsMessageEvent(p, nomeChat, mess.toString());
                         Bukkit.getPluginManager().callEvent(event);
-                        if (event.isCancelled()) return true;
+                        return event.isCancelled();
 
                     } else{
                         p.sendMessage(ChatColor.RED + "Non hai il permesso per scrivere in questa chat");
