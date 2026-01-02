@@ -21,4 +21,5 @@ Per usare l'API:
 	    <groupId>com.github.MikeWorkshop</groupId>
 	    <artifactId>Chats-plugin</artifactId>
 	    <version>1.0</version>
+		<scope>provided</scope>
 	</dependency>
